@@ -1,2 +1,2 @@
 # TruckParkApp
-mobile application supporting the parking spot search of truck drivers Edit Add topics
+mobile application supporting the parking spot search of truck drivers
