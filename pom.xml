@@ -52,6 +52,13 @@
             <artifactId>firebase-admin</artifactId>
             <version>5.6.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.maps/google-maps-services -->
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.2.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
