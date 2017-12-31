@@ -42,21 +42,11 @@ public class Controller {
 
     @GetMapping("/testAdd")
     public void testFirestoreAdd() {
-        ParkingLot parkingLotHtwgKonstanz = new ParkingLot(40,
-                new com.google.maps.model.LatLng(47.668340, 9.169379),
-                new com.google.maps.model.LatLng(47.667807, 9.169234),
-                new com.google.maps.model.LatLng(47.667902, 9.168608),
-                new com.google.maps.model.LatLng(47.668447, 9.168759));
 
-        parkingLotHtwgKonstanz.setName("HTWG");
-
-        parkingLotHtwgKonstanz.setGeofencePosition(new com.google.maps.model.LatLng(47.668110, 9.169001));
-        firestoreRepository.addHtwgParkingLotForTesting(parkingLotHtwgKonstanz);
     }
 
     @PostMapping("/parkinglots")
     public ResponseEntity getParkingLotsOnRoute(@RequestBody String s) throws IOException {
-        System.out.println(s);
         JSONObject jsonObject = new JSONObject(s);
         List<LatLng> path = new ArrayList<>();
         for(int i = 0; i < jsonObject.length(); i++){
