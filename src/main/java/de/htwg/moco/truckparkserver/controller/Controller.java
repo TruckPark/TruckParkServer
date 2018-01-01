@@ -47,13 +47,7 @@ public class Controller {
 
     @PostMapping("/parkinglots")
     public ResponseEntity getParkingLotsOnRoute(@RequestBody String s) throws IOException {
-        JSONObject jsonObject = new JSONObject(s);
-        List<LatLng> path = new ArrayList<>();
-        for(int i = 0; i < jsonObject.length(); i++){
-            System.out.println(jsonObject.toString());
-            path.add(objectMapper.readValue(jsonObject.getString(String.valueOf(i)),LatLng.class));
-        }
-        System.out.println(jsonObject);
+        firestoreService.getParkingLotsOnRoute(s);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
