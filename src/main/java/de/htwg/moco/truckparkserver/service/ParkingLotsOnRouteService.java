@@ -3,40 +3,57 @@ package de.htwg.moco.truckparkserver.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.maps.model.LatLng;
 import de.htwg.moco.truckparkserver.model.ParkingLot;
-import de.htwg.moco.truckparkserver.persistence.FirestoreRepository;
+import de.htwg.moco.truckparkserver.persistence.ParkingLotsRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.gavaghan.geodesy.Ellipsoid;
+import org.gavaghan.geodesy.GeodeticCalculator;
+import org.gavaghan.geodesy.GlobalPosition;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 //https://firebase.google.com/docs/firestore/quickstart
-public class FirestoreService {
+public class ParkingLotsOnRouteService {
 
     @Resource
     private ObjectMapper objectMapper;
 
     @Resource
-    private FirestoreRepository firestoreRepository;
+    private ParkingLotsRepository parkingLotsRepository;
 
-    public List<ParkingLot> getParkingLotsOnRoute(String path){
-        List<ParkingLot> parkingLotsOnRoute = new ArrayList<>();
+    public Set<ParkingLot> getParkingLotsOnRoute(String path){
+
         List<LatLng> latLngList = convertJsonPathToLatLngList(path);
         Map<String, Double> definedArea = getLatLngDefinedArea(latLngList);
-        List<ParkingLot> parkingLotsInsideDefinedArea = firestoreRepository.findParkingLotsWithinADefinedArea(definedArea);
+        List<ParkingLot> parkingLotsInsideDefinedArea = parkingLotsRepository.findParkingLotsWithinADefinedArea(definedArea);
 
-
-
-        return parkingLotsOnRoute;
+        return findParkingLotsOnRoute(parkingLotsInsideDefinedArea, latLngList);
     }
 
+    private Set<ParkingLot> findParkingLotsOnRoute(List<ParkingLot> parkingLotsInsideDefinedArea, List<LatLng> route){
+        return parkingLotsInsideDefinedArea.parallelStream()
+                .filter(parkingLot -> isParkingLotOnRoute(parkingLot, route))
+                .collect(Collectors.toSet());
+    }
+
+    private boolean isParkingLotOnRoute(ParkingLot parkingLot, List<LatLng> route){
+        return route.parallelStream().anyMatch(latLng -> isParkingLotNextToWaypoint(parkingLot, latLng));
+    }
+
+    private boolean isParkingLotNextToWaypoint(ParkingLot parkingLot, LatLng latLng){
+        GeodeticCalculator geoCalc = new GeodeticCalculator();
+        Ellipsoid reference = Ellipsoid.WGS84;
+        GlobalPosition pointA = new GlobalPosition(latLng.lat, latLng.lng, 0.0);
+        GlobalPosition userPos = new GlobalPosition(parkingLot.getGeofencePosition().lat,parkingLot.getGeofencePosition().lng, 0.0 );
+
+        return geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance() < 2000;
+    }
 
     private List<LatLng> convertJsonPathToLatLngList(String path){
         JSONObject jsonObject = new JSONObject(path);

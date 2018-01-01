@@ -40,7 +40,7 @@ public class DirectionPathIntegrationTest {
 //        firestoreRepository.addParkingLot(createParkingLotHtwgKonstanz().getName(), createParkingLotHtwgKonstanz());
 //        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzSouth().getName(), createParkingLotBrandbuehlRastplatzSouth());
 //        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzNorth().getName(), createParkingLotBrandbuehlRastplatzNorth());
-        firestoreRepository.addParkingLot(createParkingLotIsNotInsideDefinedArea().getName(), createParkingLotIsNotInsideDefinedArea());
+//        firestoreRepository.addParkingLot(createParkingLotIsNotInsideDefinedArea().getName(), createParkingLotIsNotInsideDefinedArea());
     }
 
 
