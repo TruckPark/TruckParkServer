@@ -49,9 +49,9 @@ public class FirestoreRepository implements ParkingLotsRepository {
             for(DocumentSnapshot documentSnapshot : querySnapshotApiFuture.get().getDocuments()){
                 System.out.println(documentSnapshot.getId());
                 ParkingLot parkingLot = documentSnapshot.toObject(ParkingLot.class);
-//                if(parkingLot.getGeofencePosition().lat < definedArea.get("maxLat") && parkingLot.getGeofencePosition().lat > definedArea.get("minLat")){
+                if(parkingLot.getGeofencePosition().lat < definedArea.get("maxLat") && parkingLot.getGeofencePosition().lat > definedArea.get("minLat")){
                     parkingLotsWithinDefinedArea.add(parkingLot);
-//                }
+                }
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
