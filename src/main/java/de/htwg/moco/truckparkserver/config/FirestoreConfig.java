@@ -33,11 +33,11 @@ public class FirestoreConfig {
     public void firebaseService() throws IOException {
         String path = "src\\main\\resources\\TruckParkMoco-31609a1b4551.json";
         InputStream serviceAccount;
-
+        GoogleCredentials credentials;
         // if file exists use configuration of file, else use env vars
         if (new File(path).exists()) {
             serviceAccount = new FileInputStream(path);
-            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+            credentials = GoogleCredentials.fromStream(serviceAccount);
         } else {
             FirebaseConfig firebaseConfig = new FirebaseConfig(
                     System.getenv("firebase.config.type"),
@@ -58,9 +58,10 @@ public class FirestoreConfig {
             //replaced escaped backslashs by single backslashs (in private key)
             String configStringUnescaped = configString.replaceAll("\\\\\\\\", "\\\\");
             serviceAccount = new ByteArrayInputStream(configStringUnescaped.getBytes());
+            credentials = GoogleCredentials.fromStream(serviceAccount);
         }
 
-        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+        //GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(credentials)
                 .build();

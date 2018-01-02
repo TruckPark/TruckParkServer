@@ -43,16 +43,30 @@ public class ParkingLotsOnRouteService {
     }
 
     private boolean isParkingLotOnRoute(ParkingLot parkingLot, List<LatLng> route){
-        return route.parallelStream().anyMatch(latLng -> isParkingLotNextToWaypoint(parkingLot, latLng));
+        return route.parallelStream().anyMatch(latLng -> isParkingLotNextToWaypoint(parkingLot, latLng, route));
     }
 
-    private boolean isParkingLotNextToWaypoint(ParkingLot parkingLot, LatLng latLng){
+    private boolean isParkingLotNextToWaypoint(ParkingLot parkingLot, LatLng latLng, List<LatLng> route){
         GeodeticCalculator geoCalc = new GeodeticCalculator();
         Ellipsoid reference = Ellipsoid.WGS84;
         GlobalPosition pointA = new GlobalPosition(latLng.lat, latLng.lng, 0.0);
         GlobalPosition userPos = new GlobalPosition(parkingLot.getGeofencePosition().lat,parkingLot.getGeofencePosition().lng, 0.0 );
 
-        return geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance() < 2000;
+        return geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance() < 2000 && isParkingLotInCorrectDirection(parkingLot, latLng, route);
+    }
+
+    private boolean isParkingLotInCorrectDirection(ParkingLot parkingLot, LatLng position, List<LatLng> route){
+        int index = route.indexOf(position);
+        if(index < route.size() && index > 0){
+            LatLng nextPosition = route.get(index+1);
+            double bearing = bearing(position.lat, position.lng, nextPosition.lat, nextPosition.lng);
+            System.out.println("Direction "+parkingLot.getName()+" : "+bearing);
+            if(bearing < parkingLot.getDrivingDirection().getUpperBoundaryDirection() && bearing > parkingLot.getDrivingDirection().getLowerBoundaryDirection()){
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     private List<LatLng> convertJsonPathToLatLngList(String path){
@@ -95,6 +109,17 @@ public class ParkingLotsOnRouteService {
         minMaxValuesMap.put("maxLng", maxLng);
 
         return minMaxValuesMap;
+    }
+
+    private double bearing(double latPos1, double lngPos1, double latNextPosOnRoute, double lngNextPosOnRoute){
+        //https://www.movable-type.co.uk/scripts/latlong.html
+        double radianLatitude = Math.toRadians(latPos1);
+        double radianLatitudeNextPos = Math.toRadians(latNextPosOnRoute);
+        double longDiff= Math.toRadians(lngNextPosOnRoute-lngPos1);
+        double y = Math.sin(longDiff)*Math.cos(radianLatitudeNextPos);
+        double x = Math.cos(radianLatitude)*Math.sin(radianLatitudeNextPos)-Math.sin(radianLatitude)*Math.cos(radianLatitudeNextPos)*Math.cos(longDiff);
+
+        return (Math.toDegrees(Math.atan2(y, x))+360)%360;
     }
 
 
