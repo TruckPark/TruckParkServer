@@ -1,6 +1,7 @@
 package de.htwg.moco.truckparkserver.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
@@ -30,17 +31,13 @@ public class FirestoreConfig {
 
     @PostConstruct
     public void firebaseService() throws IOException {
-        String path = "src\\main\\resources\\TruckParkMoco-31609a1b4551.json";
+        String path = "src\\main\\resources\\TruckParkMoco-31609a1b4551.json#";
+        InputStream serviceAccount;
 
         // if file exists use configuration of file, else use env vars
         if (new File(path).exists()) {
-            InputStream serviceAccount = new FileInputStream(path);
+            serviceAccount = new FileInputStream(path);
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(credentials)
-                    .build();
-            FirebaseApp.initializeApp(options);
         } else {
             FirebaseConfig firebaseConfig = new FirebaseConfig(
                     System.getenv("firebase.config.type"),
@@ -56,27 +53,32 @@ public class FirestoreConfig {
                     null
             );
 
-            byte[] firebaseConfigBytes = objectMapper.writeValueAsBytes(firebaseConfig);
-            GoogleCredentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(firebaseConfigBytes));
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(credentials)
-                    .build();
-            FirebaseApp.initializeApp(options);
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT); //pretty-print
+            String configString = objectMapper.writeValueAsString(firebaseConfig);
+            //replaced escaped backslashs by single backslashs (in private key)
+            String configStringUnescaped = configString.replaceAll("\\\\\\\\", "\\\\");
+            serviceAccount = new ByteArrayInputStream(configStringUnescaped.getBytes());
         }
+
+        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(credentials)
+                .build();
+        FirebaseApp.initializeApp(options);
     }
 
     @AllArgsConstructor
     class FirebaseConfig {
         public String type;
-        public String projectId;
-        public String privateKeyId;
-        public String privateKey;
-        public String clientEmail;
-        public String clientId;
-        public String authUri;
-        public String tokenUri;
-        public String authProviderX509CertUrl;
-        public String clientX509CertUrl;
-        private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+        public String project_id;
+        public String private_key_id;
+        public String private_key;
+        public String client_email;
+        public String client_id;
+        public String auth_uri;
+        public String token_uri;
+        public String auth_provider_x509_cert_url;
+        public String client_x509_cert_url;
+        private Map<String, Object> additional_properties = new HashMap<String, Object>();
     }
 }
