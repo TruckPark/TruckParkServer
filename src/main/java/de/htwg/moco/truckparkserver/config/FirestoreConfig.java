@@ -31,7 +31,7 @@ public class FirestoreConfig {
 
     @PostConstruct
     public void firebaseService() throws IOException {
-        String path = "src\\main\\resources\\TruckParkMoco-31609a1b4551.json#";
+        String path = "src\\main\\resources\\TruckParkMoco-31609a1b4551.json";
         InputStream serviceAccount;
 
         // if file exists use configuration of file, else use env vars
