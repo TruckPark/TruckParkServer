@@ -37,11 +37,13 @@ public class DirectionPathIntegrationTest {
 
     @Before
     public void setup(){
-//        firestoreRepository.addParkingLot(createParkingLotHtwgKonstanz().getName(), createParkingLotHtwgKonstanz());
-//        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzSouth().getName(), createParkingLotBrandbuehlRastplatzSouth());
-//        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzNorth().getName(), createParkingLotBrandbuehlRastplatzNorth());
-//        firestoreRepository.addParkingLot(createParkingLotIsNotInsideDefinedArea().getName(), createParkingLotIsNotInsideDefinedArea());
-//        firestoreRepository.addParkingLot(createParkingLotNellenburgNorth().getName(), createParkingLotNellenburgNorth());
+        /*
+        firestoreRepository.addParkingLot(createParkingLotHtwgKonstanz().getName(), createParkingLotHtwgKonstanz());
+        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzSouth().getName(), createParkingLotBrandbuehlRastplatzSouth());
+        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzNorth().getName(), createParkingLotBrandbuehlRastplatzNorth());
+        firestoreRepository.addParkingLot(createParkingLotIsNotInsideDefinedArea().getName(), createParkingLotIsNotInsideDefinedArea());
+        firestoreRepository.addParkingLot(createParkingLotNellenburgNorth().getName(), createParkingLotNellenburgNorth());
+        */
     }
 
 
@@ -62,6 +64,7 @@ public class DirectionPathIntegrationTest {
                 new com.google.maps.model.LatLng(47.667902, 9.168608),
                 new com.google.maps.model.LatLng(47.668447, 9.168759));
         parkingLot.setName("HTWG");
+        parkingLot.setDrivingDirection(ParkingLot.Directions.ALL);
         parkingLot.setGeofencePosition(new com.google.maps.model.LatLng(47.668110, 9.169001));
         return parkingLot;
     }
@@ -73,6 +76,7 @@ public class DirectionPathIntegrationTest {
                 new com.google.maps.model.LatLng(47.769713, 8.964834),
                 new com.google.maps.model.LatLng(47.769576, 8.965552));
         parkingLot.setName("BrandbuehlRastplatzSouth");
+        parkingLot.setDrivingDirection(ParkingLot.Directions.EAST);
         parkingLot.setGeofencePosition(new com.google.maps.model.LatLng(47.769760, 8.965064));
         return parkingLot;
     }
@@ -84,6 +88,7 @@ public class DirectionPathIntegrationTest {
                 new com.google.maps.model.LatLng(47.770689, 8.964946),
                 new com.google.maps.model.LatLng(47.770515, 8.965819));
         parkingLot.setName("BrandbuehlRastplatzNorth");
+        parkingLot.setDrivingDirection(ParkingLot.Directions.WEST);
         parkingLot.setGeofencePosition(new com.google.maps.model.LatLng(47.770508, 8.965470));
         return parkingLot;
     }
