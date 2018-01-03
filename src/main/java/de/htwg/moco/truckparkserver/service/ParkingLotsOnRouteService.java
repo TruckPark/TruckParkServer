@@ -59,7 +59,6 @@ public class ParkingLotsOnRouteService {
         JSONObject jsonObject = new JSONObject(path);
         List<LatLng> latlngPath = new ArrayList<>();
         for(int i = 0; i < jsonObject.length(); i++){
-            System.out.println(jsonObject.toString());
             try {
                 latlngPath.add(objectMapper.readValue(jsonObject.getString(String.valueOf(i)),LatLng.class));
             } catch (IOException e) {
