@@ -100,6 +100,7 @@ public class DirectionPathIntegrationTest {
                 new com.google.maps.model.LatLng(47.770689, 8.964946),
                 new com.google.maps.model.LatLng(47.770515, 8.965819));
         parkingLot.setName("IsNotInsideDefinedArea");
+        parkingLot.setDrivingDirection(ParkingLot.Directions.ALL);
         parkingLot.setGeofencePosition(new com.google.maps.model.LatLng(46.770508, 8.965470));
         return parkingLot;
     }
@@ -111,6 +112,7 @@ public class DirectionPathIntegrationTest {
                 new com.google.maps.model.LatLng(47.833054, 8.964375),
                 new com.google.maps.model.LatLng(47.832956, 8.964699));
         parkingLot.setName("NellenburgNorth");
+        parkingLot.setDrivingDirection(ParkingLot.Directions.WEST);
         parkingLot.setGeofencePosition(new com.google.maps.model.LatLng(47.832890, 8.964098));
         return parkingLot;
     }

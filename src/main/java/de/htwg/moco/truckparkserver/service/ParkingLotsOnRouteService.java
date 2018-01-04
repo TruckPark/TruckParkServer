@@ -69,7 +69,7 @@ public class ParkingLotsOnRouteService {
             LatLng nextPosition = route.get(index+1);
             double bearing = bearing(position.lat, position.lng, nextPosition.lat, nextPosition.lng);
             log.debug("Direction " + parkingLot.getName() + " : " + bearing);
-            if(bearing < parkingLot.getDrivingDirection().getUpperBoundaryDirection() && bearing > parkingLot.getDrivingDirection().getLowerBoundaryDirection()){
+            if(parkingLot.getDrivingDirection() != null && bearing < parkingLot.getDrivingDirection().getUpperBoundaryDirection() && bearing > parkingLot.getDrivingDirection().getLowerBoundaryDirection()){
                 return true;
             }
             return false;
