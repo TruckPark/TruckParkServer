@@ -27,13 +27,21 @@ public class ParkingLotsOnRouteService {
     @Resource
     private ParkingLotsRepository parkingLotsRepository;
 
-    public Set<ParkingLot> getParkingLotsOnRoute(String path){
+    public JSONObject getParkingLotsOnRoute(String path){
 
         List<LatLng> latLngList = convertJsonPathToLatLngList(path);
         Map<String, Double> definedArea = getLatLngDefinedArea(latLngList);
         List<ParkingLot> parkingLotsInsideDefinedArea = parkingLotsRepository.findParkingLotsWithinADefinedArea(definedArea);
 
-        return findParkingLotsOnRoute(parkingLotsInsideDefinedArea, latLngList);
+        return convertParkingLotsOnRouteSetToJsonObject(findParkingLotsOnRoute(parkingLotsInsideDefinedArea, latLngList));
+    }
+
+    private JSONObject convertParkingLotsOnRouteSetToJsonObject(Set<ParkingLot> parkingLots){
+        JSONObject jsonObject = new JSONObject();
+        for(ParkingLot parkingLot : parkingLots){
+            jsonObject.put(parkingLot.getName(), parkingLot);
+        }
+        return jsonObject;
     }
 
     private Set<ParkingLot> findParkingLotsOnRoute(List<ParkingLot> parkingLotsInsideDefinedArea, List<LatLng> route){

@@ -3,6 +3,7 @@ package de.htwg.moco.truckparkserver.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htwg.moco.truckparkserver.model.ParkingLot;
 import de.htwg.moco.truckparkserver.service.ParkingLotsOnRouteService;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,9 @@ public class Controller {
 
     @PostMapping("/parkinglots")
     public ResponseEntity getParkingLotsOnRoute(@RequestBody String s) throws IOException {
-        Set<ParkingLot> parkingLotsOnRoute = parkingLotsOnRouteService.getParkingLotsOnRoute(s);
-        return new ResponseEntity<>(parkingLotsOnRoute, HttpStatus.OK);
+        JSONObject parkingLotsOnRoute = parkingLotsOnRouteService.getParkingLotsOnRoute(s);
+
+        System.out.println(parkingLotsOnRoute.toString());
+        return new ResponseEntity<>(parkingLotsOnRoute.toString(), HttpStatus.OK);
     }
 }
