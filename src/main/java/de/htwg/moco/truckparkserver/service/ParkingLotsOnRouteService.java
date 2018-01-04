@@ -68,7 +68,7 @@ public class ParkingLotsOnRouteService {
         if(index < route.size() && index > 0){
             LatLng nextPosition = route.get(index+1);
             double bearing = bearing(position.lat, position.lng, nextPosition.lat, nextPosition.lng);
-            System.out.println("Direction "+parkingLot.getName()+" : "+bearing);
+            log.debug("Direction " + parkingLot.getName() + " : " + bearing);
             if(bearing < parkingLot.getDrivingDirection().getUpperBoundaryDirection() && bearing > parkingLot.getDrivingDirection().getLowerBoundaryDirection()){
                 return true;
             }
@@ -81,7 +81,6 @@ public class ParkingLotsOnRouteService {
         JSONObject jsonObject = new JSONObject(path);
         List<LatLng> latlngPath = new ArrayList<>();
         for(int i = 0; i < jsonObject.length(); i++){
-            System.out.println(jsonObject.toString());
             try {
                 latlngPath.add(objectMapper.readValue(jsonObject.getString(String.valueOf(i)),LatLng.class));
             } catch (IOException e) {

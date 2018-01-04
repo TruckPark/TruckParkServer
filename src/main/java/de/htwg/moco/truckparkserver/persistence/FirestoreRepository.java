@@ -3,9 +3,10 @@ package de.htwg.moco.truckparkserver.persistence;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-
 import de.htwg.moco.truckparkserver.model.ParkingLot;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 
 @Repository
+@Slf4j
 public class FirestoreRepository implements ParkingLotsRepository {
 
     @Resource
@@ -22,7 +24,7 @@ public class FirestoreRepository implements ParkingLotsRepository {
     public void addParkingLot(String documentId, ParkingLot parkingLot) {
         ApiFuture<WriteResult> apiFuture = firestore.collection("parkingLots").document(documentId).set(parkingLot);
         try {
-            System.out.println("Update time : " + apiFuture.get().getUpdateTime());
+            log.debug("Update time : " + apiFuture.get().getUpdateTime());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -47,7 +49,7 @@ public class FirestoreRepository implements ParkingLotsRepository {
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = query.get();
         try {
             for(DocumentSnapshot documentSnapshot : querySnapshotApiFuture.get().getDocuments()){
-                System.out.println(documentSnapshot.getId());
+                log.debug(documentSnapshot.getId());
                 ParkingLot parkingLot = documentSnapshot.toObject(ParkingLot.class);
                 if(parkingLot.getGeofencePosition().lat < definedArea.get("maxLat") && parkingLot.getGeofencePosition().lat > definedArea.get("minLat")){
                     parkingLotsWithinDefinedArea.add(parkingLot);
