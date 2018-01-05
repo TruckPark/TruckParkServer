@@ -21,8 +21,8 @@ public class FirestoreRepository implements ParkingLotsRepository {
     @Resource
     private Firestore firestore;
 
-    public void addParkingLot(String documentId, ParkingLot parkingLot) {
-        ApiFuture<WriteResult> apiFuture = firestore.collection("parkingLots").document(documentId).set(parkingLot);
+    public void addParkingLot(ParkingLot parkingLot) {
+        ApiFuture<WriteResult> apiFuture = firestore.collection("parkingLots").document(parkingLot.getName()).set(parkingLot);
         try {
             log.debug("Update time : " + apiFuture.get().getUpdateTime());
         } catch (InterruptedException | ExecutionException e) {
@@ -36,10 +36,11 @@ public class FirestoreRepository implements ParkingLotsRepository {
      * min values of Lat/Long we received a rectangle in which the suitable parking spaces are located. Unfortunately,
      * it is only possible to filter a single attribute in Firestore, so the restriction to the other attribute
      * (Latitude in this case) has to be done by us.
+     *
      * @param definedArea
      * @return
      */
-    public List<ParkingLot> findParkingLotsWithinADefinedArea(Map<String, Double> definedArea){
+    public List<ParkingLot> findParkingLotsWithinADefinedArea(Map<String, Double> definedArea) {
         List<ParkingLot> parkingLotsWithinDefinedArea = new ArrayList<>();
         CollectionReference parkingLots = firestore.collection("parkingLots");
         Query query = parkingLots
@@ -48,10 +49,10 @@ public class FirestoreRepository implements ParkingLotsRepository {
 
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = query.get();
         try {
-            for(DocumentSnapshot documentSnapshot : querySnapshotApiFuture.get().getDocuments()){
+            for (DocumentSnapshot documentSnapshot : querySnapshotApiFuture.get().getDocuments()) {
                 log.debug(documentSnapshot.getId());
                 ParkingLot parkingLot = documentSnapshot.toObject(ParkingLot.class);
-                if(parkingLot.getGeofencePosition().lat < definedArea.get("maxLat") && parkingLot.getGeofencePosition().lat > definedArea.get("minLat")){
+                if (parkingLot.getGeofencePosition().lat < definedArea.get("maxLat") && parkingLot.getGeofencePosition().lat > definedArea.get("minLat")) {
                     parkingLotsWithinDefinedArea.add(parkingLot);
                 }
             }
@@ -59,6 +60,29 @@ public class FirestoreRepository implements ParkingLotsRepository {
             e.printStackTrace();
         }
         return parkingLotsWithinDefinedArea;
+    }
+
+    @Override
+    public List<String> getParkingLotIds() {
+        try {
+            List<DocumentSnapshot> s = firestore.collection("parkingLots").select("name").get().get().getDocuments();
+            List<String> ids = new ArrayList<>();
+            s.forEach(documentSnapshot -> ids.add(documentSnapshot.get("name").toString()));
+            return ids;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ParkingLot getParkingLot(String parkingLotId) {
+        try {
+            return firestore.collection("parkingLots").document(parkingLotId).get().get().toObject(ParkingLot.class);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

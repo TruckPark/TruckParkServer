@@ -9,7 +9,11 @@ import java.util.Map;
 @Repository
 public interface ParkingLotsRepository {
 
-    void addParkingLot(String documentId, ParkingLot parkingLot);
+    void addParkingLot(ParkingLot parkingLot);
     List<ParkingLot> findParkingLotsWithinADefinedArea(Map<String, Double> definedArea);
+
+    List<String> getParkingLotIds();
+
+    ParkingLot getParkingLot(String parkingLotId);
 
 }
