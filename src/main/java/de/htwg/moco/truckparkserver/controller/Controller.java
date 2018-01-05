@@ -34,23 +34,14 @@ public class Controller {
         return "Online";
     }
 
-    @GetMapping("/testGet")
-    public void testFirestoreGet() {
-        System.out.println("test");
-    }
 
-    @GetMapping("clean")
+    @GetMapping("/clean")
     public void clean() {
         cleanUserUpdateService.clean();
     }
 
-    @GetMapping("predict")
+    @GetMapping("/predict")
     public void predict() {
-        cleanUserUpdateService.clean();
-    }
-
-    @GetMapping("/testAdd")
-    public void testFirestoreAdd() {
         predictionsService.calc();
     }
 
