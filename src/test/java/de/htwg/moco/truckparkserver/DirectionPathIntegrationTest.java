@@ -37,13 +37,11 @@ public class DirectionPathIntegrationTest {
 
     @Before
     public void setup(){
-        /*
-        firestoreRepository.addParkingLot(createParkingLotHtwgKonstanz().getName(), createParkingLotHtwgKonstanz());
-        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzSouth().getName(), createParkingLotBrandbuehlRastplatzSouth());
-        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzNorth().getName(), createParkingLotBrandbuehlRastplatzNorth());
-        firestoreRepository.addParkingLot(createParkingLotIsNotInsideDefinedArea().getName(), createParkingLotIsNotInsideDefinedArea());
-        firestoreRepository.addParkingLot(createParkingLotNellenburgNorth().getName(), createParkingLotNellenburgNorth());
-        */
+/*        firestoreRepository.addParkingLot(createParkingLotHtwgKonstanz());
+        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzSouth());
+        firestoreRepository.addParkingLot(createParkingLotBrandbuehlRastplatzNorth());
+        firestoreRepository.addParkingLot(createParkingLotIsNotInsideDefinedArea());
+        firestoreRepository.addParkingLot(createParkingLotNellenburgNorth());*/
     }
 
 
