@@ -35,6 +35,8 @@ public class ParkingLot {
 
     private Map<String, Integer> predictionAvg;
 
+    private Map<String, Integer> predictionLinearRegression;
+
     public ParkingLot(String name, List<LatLng> parkingLotDimensions, int maxParkingLots, LatLng geofencePosition) {
         this.name = name;
         this.parkingLotDimensions = parkingLotDimensions;
@@ -82,8 +84,21 @@ public class ParkingLot {
         this.name = name;
     }
 
+    public Map<String, Integer> getPredictionAvg() {
+        return predictionAvg;
+    }
 
+    public void setPredictionAvg(Map<String, Integer> predictionAvg) {
+        this.predictionAvg = predictionAvg;
+    }
 
+    public Map<String, Integer> getPredictionLinearRegression() {
+        return predictionLinearRegression;
+    }
+
+    public void setPredictionLinearRegression(Map<String, Integer> predictionLinearRegression) {
+        this.predictionLinearRegression = predictionLinearRegression;
+    }
 
     public int getMaxParkingLots() {
         return maxParkingLots;
