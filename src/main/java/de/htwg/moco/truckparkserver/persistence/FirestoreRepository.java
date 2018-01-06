@@ -123,7 +123,7 @@ public class FirestoreRepository implements ParkingLotsRepository {
     @Override
     public ApiFuture<WriteResult> addPredictionAvg(String parkingLotId, Map<String, Integer> predictionAvg) {
         Map<String, Map<String, Integer>> map = new HashMap<>();
-        map.put("prediction", predictionAvg);
+        map.put("predictionAvg", predictionAvg);
         return firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
     }
 

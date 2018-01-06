@@ -4,6 +4,7 @@ package de.htwg.moco.truckparkserver.model;
 
 
 import com.google.maps.model.LatLng;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * Created by Sebastian Thümmel on 30.12.2017.
  */
-
+@Data
 public class ParkingLot {
 
     private String name;
@@ -31,6 +32,8 @@ public class ParkingLot {
     private Directions drivingDirection;
 
     private Map<String, List<Integer>> prediction;
+
+    private Map<String, Integer> predictionAvg;
 
     public ParkingLot(String name, List<LatLng> parkingLotDimensions, int maxParkingLots, LatLng geofencePosition) {
         this.name = name;
