@@ -1,5 +1,6 @@
 package de.htwg.moco.truckparkserver.jobs;
 
+import de.htwg.moco.truckparkserver.persistence.ParkingLotsRepository;
 import de.htwg.moco.truckparkserver.service.CleanUserUpdateService;
 import de.htwg.moco.truckparkserver.service.PredictionsService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +17,29 @@ public class CronJob {
     private final PredictionsService predictionsService;
 
     @Autowired
+    ParkingLotsRepository parkingLotsRepository;
+
+    @Autowired
     public CronJob(CleanUserUpdateService cleanUserUpdateService, PredictionsService predictionsService) {
         this.cleanUserUpdateService = cleanUserUpdateService;
         this.predictionsService = predictionsService;
     }
 
+    /**
+     * just used to launch things directly at start for developing purposes
+     * todo remove
+     */
+    @Scheduled(fixedDelay = 10000000, initialDelay = 1)
+    public void dev() {
+        predictionsService.history();
+        predictionsService.calc();
+
+    }
+
 
     @Scheduled(cron = "0 0 * * * *") //every hour (00:00, 01:00...)
     public void calcPrediction() {
+        predictionsService.history();
         predictionsService.calc();
     }
 

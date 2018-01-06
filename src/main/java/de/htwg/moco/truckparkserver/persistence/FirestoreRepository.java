@@ -4,6 +4,7 @@ package de.htwg.moco.truckparkserver.persistence;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import de.htwg.moco.truckparkserver.model.ParkingLot;
+import de.htwg.moco.truckparkserver.model.ParkingLotHistory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -63,6 +64,17 @@ public class FirestoreRepository implements ParkingLotsRepository {
     }
 
     @Override
+    public List<ParkingLot> getParkingLots() {
+        List<ParkingLot> parkingLots = null;
+        try {
+            parkingLots = firestore.collection("parkingLots").get().get().toObjects(ParkingLot.class);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return parkingLots;
+    }
+
+    @Override
     public List<String> getParkingLotIds() {
         try {
             List<DocumentSnapshot> s = firestore.collection("parkingLots").select("name").get().get().getDocuments();
@@ -85,5 +97,18 @@ public class FirestoreRepository implements ParkingLotsRepository {
         }
     }
 
+    @Override
+    public ApiFuture<WriteResult> addParkingLotHistory(ParkingLotHistory parkingLotHistory) {
+        return firestore.collection("parkingLotHistories").document(parkingLotHistory.getName()).set(parkingLotHistory, SetOptions.merge());
+    }
+
+    public List<DocumentSnapshot> getParkingLotHistories() {
+        try {
+            return firestore.collection("parkingLotHistories").get().get().getDocuments();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

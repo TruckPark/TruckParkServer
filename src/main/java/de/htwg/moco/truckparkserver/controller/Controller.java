@@ -40,6 +40,11 @@ public class Controller {
         cleanUserUpdateService.clean();
     }
 
+    @GetMapping("/history")
+    public void history() {
+        predictionsService.history();
+    }
+
     @GetMapping("/predict")
     public void predict() {
         predictionsService.calc();
