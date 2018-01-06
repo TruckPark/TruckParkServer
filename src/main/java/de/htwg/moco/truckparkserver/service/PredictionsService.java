@@ -4,7 +4,6 @@ import de.htwg.moco.truckparkserver.model.ParkingLot;
 import de.htwg.moco.truckparkserver.model.ParkingLotHistory;
 import de.htwg.moco.truckparkserver.persistence.ParkingLotsRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,8 +72,12 @@ public class PredictionsService {
                 int avg = (int) Math.round(prediction.get(key).stream().mapToInt(Integer::intValue).average().getAsDouble());
                 predictionAvg.put(key, avg);
 
-                //use regression
-                SimpleRegression simpleRegression = new SimpleRegression(true);
+                //use simple regression https://stackoverflow.com/questions/30859029/use-common-math-library-in-java
+                /*SimpleRegression simpleRegression = new SimpleRegression(true);
+                simpleRegression.addData(...);
+                simpleRegression.getSlope();
+                simpleRegression.getIntercept();
+                simpleRegression.predict(...);*/
 
             });
 
