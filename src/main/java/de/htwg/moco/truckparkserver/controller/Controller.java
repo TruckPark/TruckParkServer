@@ -50,6 +50,11 @@ public class Controller {
         predictionsService.calc();
     }
 
+    @GetMapping("linreg")
+    public void linreg(){
+        predictionsService.calc();
+    }
+
     @PostMapping("/parkinglots")
     public ResponseEntity getParkingLotsOnRoute(@RequestBody String s) throws IOException {
         JSONObject parkingLotsOnRoute = parkingLotsOnRouteService.getParkingLotsOnRoute(s);

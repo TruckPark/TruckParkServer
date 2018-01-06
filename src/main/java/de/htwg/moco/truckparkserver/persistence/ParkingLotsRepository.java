@@ -29,4 +29,6 @@ public interface ParkingLotsRepository {
     ApiFuture<WriteResult> addPrediction(String parkingLotId, Map<String, List<Integer>> prediction);
 
     ApiFuture<WriteResult> addPredictionAvg(String parkingLotId, Map<String, Integer> predictionAvg);
+
+    ApiFuture<WriteResult> addPredictionLinearRegression(String parkingLotId, Map<String, Integer> predictionLinearRegression);
 }

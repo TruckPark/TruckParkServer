@@ -127,4 +127,11 @@ public class FirestoreRepository implements ParkingLotsRepository {
         return firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
     }
 
+    @Override
+    public ApiFuture<WriteResult> addPredictionLinearRegression(String parkingLotId, Map<String, Integer> predictionLinearRegression) {
+        Map<String, Map<String, Integer>> map = new HashMap<>();
+        map.put("predictionLinearRegression", predictionLinearRegression);
+        return firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
+    }
+
 }
