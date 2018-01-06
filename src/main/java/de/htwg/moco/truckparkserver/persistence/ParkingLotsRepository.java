@@ -26,5 +26,7 @@ public interface ParkingLotsRepository {
 
     List<ParkingLotHistory> getParkingLotHistories();
 
-    void addPrediction(String parkingLotId, Map<String, List<Integer>> prediction);
+    ApiFuture<WriteResult> addPrediction(String parkingLotId, Map<String, List<Integer>> prediction);
+
+    ApiFuture<WriteResult> addPredictionAvg(String parkingLotId, Map<String, Integer> predictionAvg);
 }

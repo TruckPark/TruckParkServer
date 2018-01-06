@@ -114,10 +114,17 @@ public class FirestoreRepository implements ParkingLotsRepository {
     }
 
     @Override
-    public void addPrediction(String parkingLotId, Map<String, List<Integer>> prediction) {
-        Map<String, Object> map = new HashMap<>();
+    public ApiFuture<WriteResult> addPrediction(String parkingLotId, Map<String, List<Integer>> prediction) {
+        Map<String, Map<String, List<Integer>>> map = new HashMap<>();
         map.put("prediction", prediction);
-        firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
+        return firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
+    }
+
+    @Override
+    public ApiFuture<WriteResult> addPredictionAvg(String parkingLotId, Map<String, Integer> predictionAvg) {
+        Map<String, Map<String, Integer>> map = new HashMap<>();
+        map.put("prediction", predictionAvg);
+        return firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
     }
 
 }
