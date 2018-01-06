@@ -20,6 +20,10 @@ public class PredictionsService {
     @Value("${predictions.history.createMockData}")
     boolean createMockData;
 
+    /**
+     * builds the history data
+     * creates mock data if enabled in config and usage reported is zero
+     */
     public void history() {
         List<ParkingLot> parkingLots = parkingLotsRepository.getParkingLots();
         DateTime timeSlot = DateTime.now().withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
@@ -38,6 +42,9 @@ public class PredictionsService {
         });
     }
 
+    /**
+     * calculates prediction
+     */
     public void calc() {
         List<ParkingLotHistory> parkingLotHistories = parkingLotsRepository.getParkingLotHistories();
         parkingLotHistories.forEach(parkingLotHistory -> {
@@ -52,6 +59,7 @@ public class PredictionsService {
                 String hourOfDay = dateTime.hourOfDay().getAsShortText(Locale.ENGLISH);
                 String key = dayOfWeek + "_" + hourOfDay;
 
+                //build list of history values paired by dayOfWeek and hourOfDay
                 if (prediction.containsKey(key)) {
                     List<Integer> list = prediction.get(key);
                     list.add(usage);
@@ -60,6 +68,7 @@ public class PredictionsService {
                     prediction.put(key, new ArrayList<>(Arrays.asList(usage)));
                 }
 
+                //calc average
                 String key_avg = key + "_avg";
                 int avg = (int) Math.round(prediction.get(key).stream().mapToInt(Integer::intValue).average().getAsDouble());
                 predictionAvg.put(key_avg, avg);
