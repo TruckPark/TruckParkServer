@@ -58,6 +58,7 @@ public class PredictionsService {
 
             String parkingLot = parkingLotHistory.getName();
             parkingLotHistory.getHistory().forEach((string, history) -> {
+                ParkingLot parkingLotObject = parkingLotsRepository.getParkingLot(parkingLot);
                 int usage = history.getUsage();
                 DateTime dateTime = new DateTime().withMillis(history.getMillis());
                 String dayOfWeek = dateTime.dayOfWeek().getAsShortText(Locale.ENGLISH);
@@ -97,14 +98,17 @@ public class PredictionsService {
 
                     //predict could be "not a number" if predictions size is < 2
                     if(!Double.isNaN(predict)){
-                        predictionLinearRegression.put(key, (int)Math.round(predict));
+                        if(predict < 0){
+                            predictionLinearRegression.put(key, 0);
+                        } else if (predict > parkingLotObject.getMaxParkingLots()){
+                            predictionLinearRegression.put(key, parkingLotObject.getMaxParkingLots());
+                        } else {
+                            predictionLinearRegression.put(key, (int)Math.round(predict));
+                        }
                     } else {
                         predictionLinearRegression.put(key, predictions.get(0));
                     }
                 }
-
-
-
             });
 
             ApiFuture<WriteResult> result = parkingLotsRepository.addPrediction(parkingLot, prediction);

@@ -39,8 +39,12 @@ public class CronJob {
 
 
     @Scheduled(cron = "0 0 * * * *") //every hour (00:00, 01:00...)
-    public void calcPrediction() {
+    public void calcHistory() {
         predictionsService.history();
+    }
+
+    @Scheduled(cron = "0 5 * * * *") //every hour and 5 minutes (00:05, 01:05...)
+    public void calcPrediction() {
         predictionsService.calc();
     }
 
