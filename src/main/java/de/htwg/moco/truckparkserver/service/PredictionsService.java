@@ -26,7 +26,7 @@ public class PredictionsService {
 
         parkingLots.forEach(parkingLot -> {
             int usage = parkingLot.getDevicesAtParkingArea().size();
-            if (createMockData && usage == 1) usage = new Random().nextInt(parkingLot.getMaxParkingLots());
+            if (createMockData && usage == 0) usage = new Random().nextInt(parkingLot.getMaxParkingLots());
             ParkingLotHistory.History history = new ParkingLotHistory.History(timeSlot.getMillis(), usage);
 
             Map<String, ParkingLotHistory.History> historyMap = new HashMap<>();
@@ -40,8 +40,8 @@ public class PredictionsService {
 
     public void calc() {
         List<ParkingLotHistory> parkingLotHistories = parkingLotsRepository.getParkingLotHistories();
-        Map<String, List<Integer>> prediction = new HashMap<>();
         parkingLotHistories.forEach(parkingLotHistory -> {
+            Map<String, List<Integer>> prediction = new HashMap<>();
 
             String parkingLot = parkingLotHistory.getName();
             parkingLotHistory.getHistory().forEach((string, history) -> {
