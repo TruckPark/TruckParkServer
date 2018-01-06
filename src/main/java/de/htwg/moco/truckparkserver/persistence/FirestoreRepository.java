@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -102,13 +103,21 @@ public class FirestoreRepository implements ParkingLotsRepository {
         return firestore.collection("parkingLotHistories").document(parkingLotHistory.getName()).set(parkingLotHistory, SetOptions.merge());
     }
 
-    public List<DocumentSnapshot> getParkingLotHistories() {
+    @Override
+    public List<ParkingLotHistory> getParkingLotHistories() {
         try {
-            return firestore.collection("parkingLotHistories").get().get().getDocuments();
+            return firestore.collection("parkingLotHistories").get().get().toObjects(ParkingLotHistory.class);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void addPrediction(String parkingLotId, Map<String, List<Integer>> prediction) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("prediction", prediction);
+        firestore.collection("parkingLots").document(parkingLotId).set(map, SetOptions.merge());
     }
 
 }

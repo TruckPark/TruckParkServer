@@ -8,6 +8,7 @@ import com.google.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Sebastian Thümmel on 30.12.2017.
@@ -28,6 +29,8 @@ public class ParkingLot {
     private String documentId;
 
     private Directions drivingDirection;
+
+    private Map<String, List<Integer>> prediction;
 
     public ParkingLot(String name, List<LatLng> parkingLotDimensions, int maxParkingLots, LatLng geofencePosition) {
         this.name = name;
@@ -50,6 +53,14 @@ public class ParkingLot {
         this.devicesAtParkingArea = new ArrayList<>();
         this.parkingLotDimensions = Arrays.asList(latLngs);
         this.maxParkingLots = maxParkingLots;
+    }
+
+    public Map<String, List<Integer>> getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(Map<String, List<Integer>> prediction) {
+        this.prediction = prediction;
     }
 
     public List<LatLng> getParkingLotDimensions() {

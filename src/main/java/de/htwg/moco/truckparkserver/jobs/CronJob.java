@@ -31,8 +31,9 @@ public class CronJob {
      */
     @Scheduled(fixedDelay = 10000000, initialDelay = 1)
     public void dev() {
-        predictionsService.history();
-        predictionsService.calc();
+//        cleanUserUpdateService.clean();
+//        predictionsService.history();
+//        predictionsService.calc();
 
     }
 
